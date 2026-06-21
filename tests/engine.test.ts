@@ -80,6 +80,33 @@ describe("buildSkeletonNode", () => {
     expect(node.children?.[0].style?.width).toBe("48px");
     expect(node.children?.[0].style?.height).toBe("48px");
   });
+
+  it("builds an avatar media row (circle + two lines)", () => {
+    const node = buildSkeletonNode({ variant: "avatar" });
+    const row = node.children?.[0];
+    expect(row?.class).toBe("shk-sk-row");
+    expect(row?.children?.[0].class).toContain("shk-sk--circle");
+    expect(row?.children?.[1].children).toHaveLength(2);
+  });
+
+  it("repeats list rows by count", () => {
+    const node = buildSkeletonNode({ variant: "list", count: 5 });
+    expect(node.children).toHaveLength(5);
+    expect(node.children?.[0].class).toBe("shk-sk-row");
+  });
+
+  it("builds a table of rows x columns", () => {
+    const node = buildSkeletonNode({ variant: "table", lines: 3, columns: 4 });
+    expect(node.children).toHaveLength(3);
+    expect(node.children?.[0].children).toHaveLength(4);
+  });
+
+  it("builds a responsive grid by count", () => {
+    const node = buildSkeletonNode({ variant: "grid", count: 6 });
+    expect(node.class).toContain("shk-sk-grid");
+    expect(node.children).toHaveLength(6);
+    expect(node.children?.[0].children?.[0].class).toContain("shk-sk--image");
+  });
 });
 
 describe("nodeToHTML", () => {

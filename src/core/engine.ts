@@ -70,7 +70,17 @@ const LOADER_PARTS: Record<LoaderVariant, number> = {
   wifi: 3,
 };
 
-export type SkeletonVariant = "text" | "circle" | "rect" | "card";
+export type SkeletonVariant =
+  | "text"
+  | "circle"
+  | "rect"
+  | "card"
+  | "avatar"
+  | "list"
+  | "table"
+  | "button"
+  | "image"
+  | "grid";
 
 export interface LoaderOptions {
   /** Visual style. @default "spinner" */
@@ -90,8 +100,12 @@ export interface LoaderOptions {
 export interface SkeletonOptions {
   /** Placeholder shape. @default "text" */
   variant?: SkeletonVariant;
-  /** Number of lines for the "text" variant. @default 3 */
+  /** Number of lines ("text") or rows ("table"). @default 3 */
   lines?: number;
+  /** Repeat count for the "list" and "grid" presets. @default 4 (list) / 6 (grid) */
+  count?: number;
+  /** Column count for the "table" preset. @default 3 */
+  columns?: number;
   /** Width (number → px). */
   width?: number | string;
   /** Height (number → px). */
@@ -164,10 +178,25 @@ export function buildSkeletonNode(opts: SkeletonOptions = {}): VNode {
     children: [],
   };
 
-  const line = (width?: string): VNode => ({
+  const line = (width?: string, extra?: Record<string, string>): VNode => ({
     tag: "div",
     class: "shk-sk shk-sk--line",
-    style: { width },
+    style: { width, ...extra },
+  });
+
+  const circle = (size: number | string): VNode => ({
+    tag: "div",
+    class: "shk-sk shk-sk--circle",
+    style: { width: cssLen(size), height: cssLen(size) },
+  });
+
+  const mediaRow = (avatar: number | string): VNode => ({
+    tag: "div",
+    class: "shk-sk-row",
+    children: [
+      circle(avatar),
+      { tag: "div", class: "shk-sk-col", children: [line("50%"), line("80%")] },
+    ],
   });
 
   if (variant === "text") {
@@ -194,8 +223,7 @@ export function buildSkeletonNode(opts: SkeletonOptions = {}): VNode {
         height: opts.height != null ? cssLen(opts.height) : "120px",
       },
     });
-  } else {
-    // card: image block + a few text lines
+  } else if (variant === "card") {
     root.class = "shk-sk-root shk-sk-root--card";
     root.children!.push({
       tag: "div",
@@ -206,6 +234,49 @@ export function buildSkeletonNode(opts: SkeletonOptions = {}): VNode {
       },
     });
     root.children!.push(line("90%"), line("75%"), line("50%"));
+  } else if (variant === "avatar") {
+    root.children!.push(mediaRow(opts.width ?? 48));
+  } else if (variant === "list") {
+    const n = Math.max(1, Math.floor(opts.count ?? 4));
+    for (let i = 0; i < n; i++) root.children!.push(mediaRow(opts.width ?? 40));
+  } else if (variant === "table") {
+    const rows = Math.max(1, Math.floor(opts.lines ?? 4));
+    const cols = Math.max(1, Math.floor(opts.columns ?? 3));
+    for (let r = 0; r < rows; r++) {
+      const cells: VNode[] = [];
+      for (let c = 0; c < cols; c++) cells.push(line(undefined, { flex: "1" }));
+      root.children!.push({ tag: "div", class: "shk-sk-row", children: cells });
+    }
+  } else if (variant === "button") {
+    root.children!.push({
+      tag: "div",
+      class: "shk-sk shk-sk--rect",
+      style: {
+        width: opts.width != null ? cssLen(opts.width) : "96px",
+        height: opts.height != null ? cssLen(opts.height) : "38px",
+      },
+    });
+  } else if (variant === "image") {
+    root.children!.push({
+      tag: "div",
+      class: "shk-sk shk-sk--image",
+      style: opts.height != null ? { height: cssLen(opts.height) } : {},
+    });
+  } else {
+    // grid: a responsive grid of card items (image + two lines)
+    root.class = "shk-sk-root shk-sk-grid";
+    const n = Math.max(1, Math.floor(opts.count ?? 6));
+    for (let i = 0; i < n; i++) {
+      root.children!.push({
+        tag: "div",
+        class: "shk-sk-col",
+        children: [
+          { tag: "div", class: "shk-sk shk-sk--image" },
+          line("80%"),
+          line("55%"),
+        ],
+      });
+    }
   }
 
   return root;
@@ -526,8 +597,12 @@ export const STYLES = /* css */ `
   animation: shk-shimmer calc(1.4s / var(--_speed)) infinite;
 }
 .shk-sk--line{ height: .8em; width: 100%; }
-.shk-sk--circle{ border-radius: 50%; }
+.shk-sk--circle{ border-radius: 50%; flex: none; }
 .shk-sk--rect{ width: 100%; }
+.shk-sk--image{ width: 100%; aspect-ratio: 16 / 9; }
+.shk-sk-row{ display: flex; flex-direction: row; align-items: center; gap: .75em; width: 100%; }
+.shk-sk-col{ display: flex; flex-direction: column; gap: .5em; flex: 1; min-width: 0; }
+.shk-sk-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1.2em; }
 @keyframes shk-shimmer{ 100%{ transform: translateX(100%); } }
 
 /* accessibility: degrade gracefully to a calm pulse, never freeze silently */

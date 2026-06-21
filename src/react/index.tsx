@@ -13,6 +13,7 @@ import {
   buildSkeletonNode,
   type LoaderOptions,
   type SkeletonOptions,
+  type VNode,
 } from "../core/engine";
 
 const STYLE_ID = "shimmerkit-styles";
@@ -57,6 +58,14 @@ function cx(...parts: Array<string | undefined>): string {
   return parts.filter(Boolean).join(" ");
 }
 
+function renderVNode(node: VNode, key: React.Key): React.ReactElement {
+  return React.createElement(
+    node.tag,
+    { key, className: node.class || undefined, style: toStyle(node.style) },
+    node.children?.map((child, i) => renderVNode(child, i)),
+  );
+}
+
 export interface LoaderProps
   extends LoaderOptions,
     Omit<React.HTMLAttributes<HTMLDivElement>, "color"> {}
@@ -99,6 +108,8 @@ export interface SkeletonProps
 export function Skeleton({
   variant,
   lines,
+  count,
+  columns,
   width,
   height,
   radius,
@@ -108,7 +119,16 @@ export function Skeleton({
   ...rest
 }: SkeletonProps): React.ReactElement {
   useStyles();
-  const node = buildSkeletonNode({ variant, lines, width, height, radius, speed });
+  const node = buildSkeletonNode({
+    variant,
+    lines,
+    count,
+    columns,
+    width,
+    height,
+    radius,
+    speed,
+  });
   return (
     <div
       className={cx(node.class, className)}
@@ -116,9 +136,7 @@ export function Skeleton({
       aria-hidden
       {...rest}
     >
-      {node.children?.map((child, i) => (
-        <div key={i} className={child.class} style={toStyle(child.style)} />
-      ))}
+      {node.children?.map((child, i) => renderVNode(child, i))}
     </div>
   );
 }

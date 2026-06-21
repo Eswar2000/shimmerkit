@@ -116,7 +116,7 @@ export function register(): void {
 
   class ShkSkeletonElement extends ShkBase {
     static get observedAttributes(): string[] {
-      return ["variant", "lines", "width", "height", "radius", "speed"];
+      return ["variant", "lines", "count", "columns", "width", "height", "radius", "speed"];
     }
 
     protected applyHostDisplay(): void {
@@ -127,6 +127,8 @@ export function register(): void {
       const node = buildSkeletonNode({
         variant: (this.getAttribute("variant") as SkeletonVariant) ?? undefined,
         lines: float(this, "lines"),
+        count: float(this, "count"),
+        columns: float(this, "columns"),
         width: num(this, "width"),
         height: num(this, "height"),
         radius: num(this, "radius"),

@@ -9,7 +9,7 @@
 
 **[🔗 Live demo](https://eswar2000.github.io/shimmerkit/)** — play with every loader & skeleton, tweak color, size, and speed.
 
-18 curated, hand-tuned loaders + 4 skeleton shapes. No SVG, no JS animation loop — just CSS that scales with `currentColor` and a couple of custom properties. The exact same visuals everywhere because every renderer reads from one shared engine.
+18 curated, hand-tuned loaders + 10 skeleton presets. No SVG, no JS animation loop — just CSS that scales with `currentColor` and a couple of custom properties. The exact same visuals everywhere because every renderer reads from one shared engine.
 
 ```
 spinner · dots · bars · pulse · ring · ripple · wave · grid · orbit · bounce
@@ -89,14 +89,16 @@ Works the same in **Vue** and **Svelte** templates — they're just custom eleme
 
 ### Skeleton
 
-| Prop / attribute | Type                              | Default |
-| ---------------- | --------------------------------- | ------- |
-| `variant`        | `text · circle · rect · card`     | `text`  |
-| `lines`          | `number` (text variant)           | `3`     |
-| `width`          | `number` (px) \| CSS length       | —       |
-| `height`         | `number` (px) \| CSS length       | —       |
-| `radius`         | `number` (px) \| CSS length       | `8`     |
-| `speed`          | `number` multiplier               | `1`     |
+| Prop / attribute | Type                                                                              | Default |
+| ---------------- | --------------------------------------------------------------------------------- | ------- |
+| `variant`        | `text · circle · rect · card · avatar · list · table · button · image · grid`      | `text`  |
+| `lines`          | `number` — lines (`text`) or rows (`table`)                                        | `3`     |
+| `count`          | `number` — items for `list` / `grid`                                               | `4` / `6` |
+| `columns`        | `number` — columns for `table`                                                     | `3`     |
+| `width`          | `number` (px) \| CSS length                                                        | —       |
+| `height`         | `number` (px) \| CSS length                                                        | —       |
+| `radius`         | `number` (px) \| CSS length                                                        | `8`     |
+| `speed`          | `number` multiplier                                                               | `1`     |
 
 ### Theming with CSS variables
 

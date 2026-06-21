@@ -67,7 +67,8 @@
       .controls input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
       .controls input[type="color"]::-webkit-color-swatch { border: none; border-radius: 8px; }
       .controls input[type="color"]::-moz-color-swatch { border: none; border-radius: 8px; }
-      .sk-card { background: #151922; border: 1px solid #232a37; border-radius: 14px; padding: 1.25rem; max-width: 320px; }
+      .sk-card { background: #151922; border: 1px solid #232a37; border-radius: 14px; padding: 1.25rem; max-width: 320px; display: flex; flex-direction: column; }
+      .sk-card .name { font-size: .8rem; color: #9aa3b2; margin-top: auto; padding-top: 1rem; text-align: center; display: block; }
       .accent { color: #818cf8; }
       .footer {
         margin-top: 3.5rem;
@@ -101,12 +102,14 @@
 
     <h2>Skeletons</h2>
     <div class="grid">
-      <div class="sk-card"><shk-skeleton variant="text" lines="4"></shk-skeleton></div>
-      <div class="sk-card" style="display:flex; gap:1rem; align-items:center;">
-        <shk-skeleton variant="circle" width="48" style="flex:none;"></shk-skeleton>
-        <shk-skeleton variant="text" lines="2" style="flex:1;"></shk-skeleton>
-      </div>
-      <div class="sk-card"><shk-skeleton variant="card"></shk-skeleton></div>
+      <div class="sk-card"><shk-skeleton variant="text" lines="4"></shk-skeleton><span class="name">text</span></div>
+      <div class="sk-card"><shk-skeleton variant="avatar"></shk-skeleton><span class="name">avatar</span></div>
+      <div class="sk-card"><shk-skeleton variant="list" count="3"></shk-skeleton><span class="name">list</span></div>
+      <div class="sk-card"><shk-skeleton variant="table" lines="4" columns="3"></shk-skeleton><span class="name">table</span></div>
+      <div class="sk-card"><shk-skeleton variant="image"></shk-skeleton><span class="name">image</span></div>
+      <div class="sk-card"><shk-skeleton variant="button"></shk-skeleton><span class="name">button</span></div>
+      <div class="sk-card"><shk-skeleton variant="card"></shk-skeleton><span class="name">card</span></div>
+      <div class="sk-card" style="grid-column: 1 / -1;"><shk-skeleton variant="grid" count="4"></shk-skeleton><span class="name">grid</span></div>
     </div>
 
     <footer class="footer">
