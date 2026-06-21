@@ -52,15 +52,15 @@
     "css-animation",
     "ui"
   ],
-  "author": "your-name <you@example.com>",
+  "author": "Eswar V <v.eswarraman2000@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-name/shimmerkit.git"
+    "url": "https://github.com/Eswar2000/shimmerkit.git"
   },
-  "homepage": "https://github.com/your-name/shimmerkit#readme",
+  "homepage": "https://github.com/Eswar2000/shimmerkit#readme",
   "bugs": {
-    "url": "https://github.com/your-name/shimmerkit/issues"
+    "url": "https://github.com/Eswar2000/shimmerkit/issues"
   },
   "peerDependencies": {
     "react": ">=17",
