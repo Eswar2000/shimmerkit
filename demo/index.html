@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>shimmerkit — demo</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0d12'/%3E%3Ctext x='16' y='22.5' font-family='ui-sans-serif,system-ui,Segoe UI,Roboto,sans-serif' font-size='21' font-weight='700' fill='%23818cf8' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E"
+    />
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 2.5rem clamp(1rem, 4vw, 3rem);
+        background: #0b0d12;
+        color: #e7e9ee;
+      }
+      h1 { font-size: 1.6rem; margin: 0 0 .25rem; }
+      p.lede { margin: 0 0 2rem; color: #9aa3b2; }
+      h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: .08em; color: #9aa3b2; margin: 2.5rem 0 1rem; }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+      }
+      .card {
+        background: #151922;
+        border: 1px solid #232a37;
+        border-radius: 14px;
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        min-height: 130px;
+        justify-content: center;
+      }
+      .card .name { font-size: .8rem; color: #9aa3b2; }
+      .controls { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: center; margin-bottom: .5rem; }
+      .controls label { font-size: .85rem; color: #9aa3b2; display: flex; gap: .5rem; align-items: center; }
+      .sk-card { background: #151922; border: 1px solid #232a37; border-radius: 14px; padding: 1.25rem; max-width: 320px; }
+      .accent { color: #818cf8; }
+    </style>
+  </head>
+  <body>
+    <h1>shimmer<span class="accent">kit</span></h1>
+    <p class="lede">Framework-agnostic animated loaders &amp; skeletons. Rendered below as native Web Components.</p>
+
+    <div class="controls">
+      <label>color <input id="color" type="color" value="#818cf8" /></label>
+      <label>size <input id="size" type="range" min="24" max="96" value="48" /></label>
+      <label>speed <input id="speed" type="range" min="0.5" max="3" step="0.1" value="1" /></label>
+    </div>
+
+    <h2>Loaders</h2>
+    <div class="grid" id="loaders"></div>
+
+    <h2>Skeletons</h2>
+    <div class="grid">
+      <div class="sk-card"><shk-skeleton variant="text" lines="4"></shk-skeleton></div>
+      <div class="sk-card" style="display:flex; gap:1rem; align-items:center;">
+        <shk-skeleton variant="circle" width="48" style="flex:none;"></shk-skeleton>
+        <shk-skeleton variant="text" lines="2" style="flex:1;"></shk-skeleton>
+      </div>
+      <div class="sk-card"><shk-skeleton variant="card"></shk-skeleton></div>
+    </div>
+
+    <script type="module">
+      import { LOADER_VARIANTS } from "../dist/index.js";
+
+      const grid = document.getElementById("loaders");
+      const loaders = [];
+      for (const variant of LOADER_VARIANTS) {
+        const card = document.createElement("div");
+        card.className = "card";
+        const loader = document.createElement("shk-loader");
+        loader.setAttribute("variant", variant);
+        loader.setAttribute("size", "48");
+        loader.setAttribute("color", "#818cf8");
+        const name = document.createElement("div");
+        name.className = "name";
+        name.textContent = variant;
+        card.append(loader, name);
+        grid.appendChild(card);
+        loaders.push(loader);
+      }
+
+      const color = document.getElementById("color");
+      const size = document.getElementById("size");
+      const speed = document.getElementById("speed");
+      const apply = () => {
+        for (const l of loaders) {
+          l.setAttribute("color", color.value);
+          l.setAttribute("size", size.value);
+          l.setAttribute("speed", speed.value);
+        }
+        for (const sk of document.querySelectorAll("shk-skeleton")) {
+          sk.style.color = color.value;
+          sk.setAttribute("speed", speed.value);
+        }
+      };
+      [color, size, speed].forEach((c) => c.addEventListener("input", apply));
+      apply();
+    </script>
+  </body>
+</html>

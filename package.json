@@ -1,0 +1,85 @@
+{
+  "name": "shimmerkit",
+  "version": "0.1.0",
+  "description": "Zero-dependency, framework-agnostic animated loaders & skeleton placeholders. One tuned engine, drops into React, Vue, Svelte, or plain HTML via Web Components. Accessible by default.",
+  "type": "module",
+  "sideEffects": [
+    "./dist/index.js",
+    "./dist/index.cjs",
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.js",
+      "require": "./dist/react.cjs"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup && node scripts/emit-css.mjs",
+    "dev": "tsup --watch",
+    "demo": "npm run build && node scripts/serve-demo.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "loader",
+    "loaders",
+    "spinner",
+    "spinners",
+    "skeleton",
+    "shimmer",
+    "loading",
+    "placeholder",
+    "react",
+    "web-components",
+    "custom-elements",
+    "vue",
+    "svelte",
+    "css-animation",
+    "ui"
+  ],
+  "author": "your-name <you@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-name/shimmerkit.git"
+  },
+  "homepage": "https://github.com/your-name/shimmerkit#readme",
+  "bugs": {
+    "url": "https://github.com/your-name/shimmerkit/issues"
+  },
+  "peerDependencies": {
+    "react": ">=17",
+    "react-dom": ">=17"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
