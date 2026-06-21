@@ -25,7 +25,8 @@ export type LoaderVariant =
   | "bouncer"
   | "liquid"
   | "muncher"
-  | "wifi";
+  | "wifi"
+  | "helix";
 
 export const LOADER_VARIANTS: readonly LoaderVariant[] = [
   "spinner",
@@ -46,6 +47,7 @@ export const LOADER_VARIANTS: readonly LoaderVariant[] = [
   "liquid",
   "muncher",
   "wifi",
+  "helix",
 ];
 
 /** How many `.shk__part` children each variant needs. */
@@ -68,6 +70,7 @@ const LOADER_PARTS: Record<LoaderVariant, number> = {
   liquid: 2,
   muncher: 3,
   wifi: 3,
+  helix: 5,
 };
 
 export type SkeletonVariant =
@@ -534,6 +537,29 @@ export const STYLES = /* css */ `
 .shk--wifi .shk__part:nth-child(2){ width: 60%; aspect-ratio: 1; animation-delay: calc(0.18s / var(--_speed)); }
 .shk--wifi .shk__part:nth-child(3){ width: 90%; aspect-ratio: 1; animation-delay: calc(0.36s / var(--_speed)); }
 
+/* helix (DNA double strand) */
+.shk--helix{ gap: 3%; }
+.shk--helix .shk__part{ position: relative; height: 100%; flex: 1; }
+.shk--helix .shk__part::before,
+.shk--helix .shk__part::after{
+  content: ""; position: absolute; left: 50%; top: 0;
+  width: 80%; aspect-ratio: 1; border-radius: 50%; background: currentColor;
+  transform: translate(-50%, 0);
+  animation: shk-helix calc(2s / var(--_speed)) ease-in-out infinite;
+}
+.shk--helix .shk__part::after{
+  top: 100%; transform: translate(-50%, -100%);
+  animation-delay: calc(-1s / var(--_speed));
+}
+.shk--helix .shk__part:nth-child(2)::before{ animation-delay: calc(-0.18s / var(--_speed)); }
+.shk--helix .shk__part:nth-child(2)::after{ animation-delay: calc(-1.18s / var(--_speed)); }
+.shk--helix .shk__part:nth-child(3)::before{ animation-delay: calc(-0.36s / var(--_speed)); }
+.shk--helix .shk__part:nth-child(3)::after{ animation-delay: calc(-1.36s / var(--_speed)); }
+.shk--helix .shk__part:nth-child(4)::before{ animation-delay: calc(-0.54s / var(--_speed)); }
+.shk--helix .shk__part:nth-child(4)::after{ animation-delay: calc(-1.54s / var(--_speed)); }
+.shk--helix .shk__part:nth-child(5)::before{ animation-delay: calc(-0.72s / var(--_speed)); }
+.shk--helix .shk__part:nth-child(5)::after{ animation-delay: calc(-1.72s / var(--_speed)); }
+
 @keyframes shk-spin{ to{ transform: rotate(360deg); } }
 @keyframes shk-dots{ 0%,80%,100%{ transform: scale(.3); opacity: .4; } 40%{ transform: scale(1); opacity: 1; } }
 @keyframes shk-bars{ 0%,100%{ transform: scaleY(.3); } 50%{ transform: scaleY(1); } }
@@ -581,6 +607,10 @@ export const STYLES = /* css */ `
   0%,55%,100%{ opacity: .18; }
   28%{ opacity: 1; }
 }
+@keyframes shk-helix{
+  0%,100%{ top: 0%; transform: translate(-50%, 0%) scale(1); opacity: 1; z-index: 2; }
+  50%{ top: 100%; transform: translate(-50%, -100%) scale(.45); opacity: .4; z-index: 1; }
+}
 
 /* skeletons */
 .shk-sk-root{ display: flex; flex-direction: column; gap: .6em; width: 100%; }
@@ -610,6 +640,9 @@ export const STYLES = /* css */ `
   .shk .shk__part{
     animation: shk-rm-pulse 1.6s ease-in-out infinite !important;
     transform: none !important;
+  }
+  .shk--helix .shk__part::before, .shk--helix .shk__part::after{
+    animation: shk-rm-pulse 1.6s ease-in-out infinite !important;
   }
   .shk-sk::after{ display: none; }
   .shk-sk{ animation: shk-rm-pulse 1.6s ease-in-out infinite; }
