@@ -5,7 +5,7 @@
 [![npm](https://img.shields.io/npm/v/shimmerkit.svg)](https://www.npmjs.com/package/shimmerkit)
 [![downloads](https://img.shields.io/npm/dw/shimmerkit.svg)](https://www.npmjs.com/package/shimmerkit)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/shimmerkit)](https://bundlephobia.com/package/shimmerkit)
-[![license](https://img.shields.io/npm/l/shimmerkit.svg)](./LICENSE)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 **[🔗 Live demo](https://eswar2000.github.io/shimmerkit/)** — play with every loader & skeleton, tweak color, size, and speed.
 
