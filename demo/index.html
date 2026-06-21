@@ -69,6 +69,21 @@
       .controls input[type="color"]::-moz-color-swatch { border: none; border-radius: 8px; }
       .sk-card { background: #151922; border: 1px solid #232a37; border-radius: 14px; padding: 1.25rem; max-width: 320px; }
       .accent { color: #818cf8; }
+      .footer {
+        margin-top: 3.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #232a37;
+        display: flex;
+        flex-wrap: wrap;
+        gap: .75rem 1.25rem;
+        align-items: center;
+        justify-content: space-between;
+        font-size: .82rem;
+        color: #6b7280;
+      }
+      .footer-links { display: flex; gap: 1.25rem; }
+      .footer a { color: #9aa3b2; text-decoration: none; transition: color .15s ease; }
+      .footer a:hover { color: var(--accent); }
     </style>
   </head>
   <body>
@@ -94,8 +109,18 @@
       <div class="sk-card"><shk-skeleton variant="card"></shk-skeleton></div>
     </div>
 
+    <footer class="footer">
+      <span>&copy; <span id="year">2026</span> Eswar V. Released under the MIT License.</span>
+      <span class="footer-links">
+        <a href="https://github.com/Eswar2000/shimmerkit" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.npmjs.com/package/shimmerkit" target="_blank" rel="noopener noreferrer">npm</a>
+      </span>
+    </footer>
+
     <script type="module">
       import { LOADER_VARIANTS } from "../dist/index.js";
+
+      document.getElementById("year").textContent = new Date().getFullYear();
 
       const grid = document.getElementById("loaders");
       const loaders = [];

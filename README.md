@@ -7,6 +7,8 @@
 [![bundle size](https://img.shields.io/bundlephobia/minzip/shimmerkit)](https://bundlephobia.com/package/shimmerkit)
 [![license](https://img.shields.io/npm/l/shimmerkit.svg)](./LICENSE)
 
+**[🔗 Live demo](https://eswar2000.github.io/shimmerkit/)** — play with every loader & skeleton, tweak color, size, and speed.
+
 18 curated, hand-tuned loaders + 4 skeleton shapes. No SVG, no JS animation loop — just CSS that scales with `currentColor` and a couple of custom properties. The exact same visuals everywhere because every renderer reads from one shared engine.
 
 ```
