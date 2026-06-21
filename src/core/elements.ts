@@ -62,6 +62,8 @@ export function register(): void {
 
   abstract class ShkBase extends HTMLElement {
     protected mount: HTMLDivElement;
+    private delayTimer?: ReturnType<typeof setTimeout>;
+    private delayed = false;
 
     constructor() {
       super();
@@ -81,11 +83,30 @@ export function register(): void {
 
     connectedCallback(): void {
       this.applyHostDisplay();
+      const attr = this.getAttribute("delay");
+      const delay = attr == null ? 0 : Number.parseFloat(attr);
+      if (Number.isFinite(delay) && delay > 0) {
+        this.delayed = true;
+        this.mount.style.display = "none";
+        this.delayTimer = setTimeout(() => {
+          this.delayed = false;
+          this.mount.style.display = "contents";
+          this.render();
+        }, delay);
+        return;
+      }
       this.render();
     }
 
+    disconnectedCallback(): void {
+      if (this.delayTimer) {
+        clearTimeout(this.delayTimer);
+        this.delayTimer = undefined;
+      }
+    }
+
     attributeChangedCallback(): void {
-      if (this.isConnected) this.render();
+      if (this.isConnected && !this.delayed) this.render();
     }
 
     protected abstract applyHostDisplay(): void;

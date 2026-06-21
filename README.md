@@ -58,6 +58,19 @@ Styles auto-inject on the client. For zero-flash SSR, also import the stylesheet
 import "shimmerkit/styles.css";
 ```
 
+### Avoid flashing on fast loads
+
+Pass `delay` (ms) and the loader/skeleton stays hidden until that time elapses — if your data arrives first, nothing ever flashes:
+
+```tsx
+<Loader variant="ring" delay={150} />
+<Skeleton variant="list" count={5} delay={150} />
+```
+
+```html
+<shk-loader variant="ring" delay="150"></shk-loader>
+```
+
 ## Anywhere else (Web Components)
 
 ```html
@@ -86,6 +99,7 @@ Works the same in **Vue** and **Svelte** templates — they're just custom eleme
 | `speed`          | `number` multiplier (2 = twice as fast)                                                    | `1`            |
 | `thickness`      | `number` (px) \| CSS length — ring/spinner/ripple stroke                                   | 10% of size    |
 | `label`          | `string` — screen-reader text                                                              | `Loading`      |
+| `delay`          | `number` (ms) — wait before showing, to avoid flashing on fast loads                       | `0`            |
 
 ### Skeleton
 
@@ -99,6 +113,7 @@ Works the same in **Vue** and **Svelte** templates — they're just custom eleme
 | `height`         | `number` (px) \| CSS length                                                        | —       |
 | `radius`         | `number` (px) \| CSS length                                                        | `8`     |
 | `speed`          | `number` multiplier                                                               | `1`     |
+| `delay`          | `number` (ms) — wait before showing                                               | `0`     |
 
 ### Theming with CSS variables
 

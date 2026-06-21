@@ -66,9 +66,27 @@ function renderVNode(node: VNode, key: React.Key): React.ReactElement {
   );
 }
 
+/** Returns false until `delay` ms have elapsed; true immediately when no delay. */
+function useDelayed(delay?: number): boolean {
+  const [show, setShow] = React.useState(!delay || delay <= 0);
+  React.useEffect(() => {
+    if (!delay || delay <= 0) {
+      setShow(true);
+      return;
+    }
+    setShow(false);
+    const t = setTimeout(() => setShow(true), delay);
+    return () => clearTimeout(t);
+  }, [delay]);
+  return show;
+}
+
 export interface LoaderProps
   extends LoaderOptions,
-    Omit<React.HTMLAttributes<HTMLDivElement>, "color"> {}
+    Omit<React.HTMLAttributes<HTMLDivElement>, "color"> {
+  /** Wait this many ms before showing, to avoid flashing on fast loads. */
+  delay?: number;
+}
 
 /** Animated loading indicator. */
 export function Loader({
@@ -78,11 +96,14 @@ export function Loader({
   speed,
   thickness,
   label,
+  delay,
   className,
   style,
   ...rest
-}: LoaderProps): React.ReactElement {
+}: LoaderProps): React.ReactElement | null {
   useStyles();
+  const show = useDelayed(delay);
+  if (!show) return null;
   const node = buildLoaderNode({ variant, size, color, speed, thickness, label });
   return (
     <div
@@ -102,7 +123,10 @@ export function Loader({
 
 export interface SkeletonProps
   extends SkeletonOptions,
-    React.HTMLAttributes<HTMLDivElement> {}
+    React.HTMLAttributes<HTMLDivElement> {
+  /** Wait this many ms before showing, to avoid flashing on fast loads. */
+  delay?: number;
+}
 
 /** Shimmering content placeholder. */
 export function Skeleton({
@@ -114,11 +138,14 @@ export function Skeleton({
   height,
   radius,
   speed,
+  delay,
   className,
   style,
   ...rest
-}: SkeletonProps): React.ReactElement {
+}: SkeletonProps): React.ReactElement | null {
   useStyles();
+  const show = useDelayed(delay);
+  if (!show) return null;
   const node = buildSkeletonNode({
     variant,
     lines,
