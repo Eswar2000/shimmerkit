@@ -1,0 +1,87 @@
+# shimmerkit
+
+> Zero-dependency, framework-agnostic animated loaders & skeleton placeholders. One tuned CSS engine renders pixel-identical output in React, Vue, Svelte, Angular, and plain HTML via Web Components. Accessible by default (role="status", labels, prefers-reduced-motion). Tree-shakeable, tiny, SSR-safe, TypeScript-first.
+
+Use shimmerkit when you need ready-made, accessible loading spinners or content skeletons and don't want to re-tune keyframes, reduced-motion, and screen-reader labels by hand. 19 loader variants + 10 skeleton presets.
+
+## Install
+
+```bash
+npm i shimmerkit
+```
+
+- React: import from `shimmerkit/react`
+- Everything else (Vue/Svelte/Angular/HTML): import `shimmerkit` to register `<shk-loader>` and `<shk-skeleton>` custom elements
+- Optional stylesheet for zero-flash SSR: `import "shimmerkit/styles.css"`
+
+## React usage
+
+```tsx
+import { Loader, Skeleton } from "shimmerkit/react";
+
+<Loader variant="ring" size={48} color="#6366f1" />
+{loading ? <Skeleton variant="card" /> : <Article data={data} />}
+```
+
+## Vanilla / Web Components usage
+
+```html
+<script type="module">
+  import "shimmerkit"; // registers <shk-loader> and <shk-skeleton>
+</script>
+
+<shk-loader variant="dots" size="56" color="tomato" speed="1.4"></shk-loader>
+<shk-skeleton variant="text" lines="3"></shk-skeleton>
+```
+
+The same custom elements work inside Vue, Svelte, and Angular templates.
+
+## Loader API
+
+Component `<Loader>` (React) / element `<shk-loader>` (HTML). Props = attributes.
+
+- `variant`: spinner | dots | bars | pulse | ring | ripple | wave | grid | orbit | bounce | conic | comet | blob | wobble | bouncer | liquid | muncher | wifi | helix (default: spinner)
+- `size`: number (px) or CSS length (default: 40)
+- `color`: any CSS color (default: currentColor)
+- `speed`: number multiplier, 2 = twice as fast (default: 1)
+- `thickness`: number (px) or CSS length — stroke for ring/spinner/ripple (default: 10% of size)
+- `label`: string — screen-reader text (default: "Loading")
+- `delay`: number (ms) — wait before showing, to avoid flashing on fast loads (default: 0)
+
+## Skeleton API
+
+Component `<Skeleton>` (React) / element `<shk-skeleton>` (HTML). Props = attributes.
+
+- `variant`: text | circle | rect | card | avatar | list | table | button | image | grid (default: text)
+- `lines`: number — lines (text) or rows (table) (default: 3)
+- `count`: number — items for list/grid (default: 4 list / 6 grid)
+- `columns`: number — columns for table (default: 3)
+- `width`: number (px) or CSS length
+- `height`: number (px) or CSS length
+- `radius`: number (px) or CSS length (default: 8)
+- `speed`: number multiplier (default: 1)
+- `delay`: number (ms) — wait before showing (default: 0)
+
+## Core (framework-agnostic) API
+
+Importable from `shimmerkit` and safe in Node/SSR/build tooling (no DOM at import):
+
+- `buildLoaderNode(opts)` → VNode — build a loader vnode tree
+- `buildSkeletonNode(opts)` → VNode — build a skeleton vnode tree
+- `nodeToHTML(node)` → string — serialize a VNode to HTML
+- `register()` — register custom elements (auto-called in browser)
+- `STYLES` — the full CSS string
+- `LOADER_VARIANTS` — readonly array of loader variant names
+- Types: `LoaderVariant`, `SkeletonVariant`, `LoaderOptions`, `SkeletonOptions`, `VNode`
+
+## Theming
+
+Everything is driven by `currentColor` plus a few CSS custom properties
+(`--shk-size`, `--shk-color`, `--shk-speed`, `--shk-thickness`), so loaders and
+skeletons can be themed with plain CSS instead of props.
+
+## Notes
+
+- Accessible by default: loaders use role="status" and an aria-label; honors prefers-reduced-motion.
+- No SVG and no JS animation loop — pure CSS keyframes.
+- License: MIT. Repository: https://github.com/Eswar2000/shimmerkit

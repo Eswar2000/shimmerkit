@@ -88,7 +88,28 @@ export interface LoaderProps
   delay?: number;
 }
 
-/** Animated loading indicator. */
+/**
+ * Animated loading indicator. Renders real DOM, is SSR-safe, and announces
+ * itself to screen readers via `role="status"`.
+ *
+ * @example Basic spinner
+ * ```tsx
+ * import { Loader } from "shimmerkit/react";
+ *
+ * <Loader />
+ * ```
+ *
+ * @example Themed variant
+ * ```tsx
+ * <Loader variant="ring" size={48} color="#6366f1" speed={1.4} />
+ * ```
+ *
+ * @example Avoid flashing on fast loads
+ * ```tsx
+ * // Stays hidden for 150ms; if data arrives first, nothing ever flashes.
+ * <Loader variant="dots" delay={150} />
+ * ```
+ */
 export function Loader({
   variant,
   size,
@@ -128,7 +149,27 @@ export interface SkeletonProps
   delay?: number;
 }
 
-/** Shimmering content placeholder. */
+/**
+ * Shimmering content placeholder. Swap it in while data loads, then render the
+ * real content once ready.
+ *
+ * @example Text lines
+ * ```tsx
+ * import { Skeleton } from "shimmerkit/react";
+ *
+ * <Skeleton variant="text" lines={3} />
+ * ```
+ *
+ * @example Conditional content
+ * ```tsx
+ * {loading ? <Skeleton variant="card" /> : <Article data={data} />}
+ * ```
+ *
+ * @example List preset
+ * ```tsx
+ * <Skeleton variant="list" count={5} delay={150} />
+ * ```
+ */
 export function Skeleton({
   variant,
   lines,

@@ -25,7 +25,8 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "llms.txt"
   ],
   "scripts": {
     "build": "tsup && node scripts/emit-css.mjs",
@@ -44,13 +45,37 @@
     "shimmer",
     "loading",
     "placeholder",
+
+    "loading-spinner",
+    "skeleton-loader",
+    "loading-state",
+    "loading-indicator",
+    "loading-placeholder",
+    "content-placeholder",
+    "suspense-fallback",
+    "shimmer-effect",
+
     "react",
-    "web-components",
-    "custom-elements",
     "vue",
     "svelte",
+    "angular",
+    "solid",
+    "preact",
+    "nextjs",
+    "web-components",
+    "custom-elements",
+
+    "accessible",
+    "a11y",
+    "ssr",
+    "zero-dependency",
+    "tree-shakeable",
+    "framework-agnostic",
     "css-animation",
-    "ui"
+
+    "ui",
+    "ui-components",
+    "frontend"
   ],
   "author": "Eswar V <v.eswarraman2000@gmail.com>",
   "license": "MIT",

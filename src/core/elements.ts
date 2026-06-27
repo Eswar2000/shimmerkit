@@ -52,6 +52,20 @@ function float(el: Element, name: string): number | undefined {
  * Register `<shk-loader>` and `<shk-skeleton>`. Safe to call multiple times and
  * a no-op outside the browser. Called automatically when you import the package
  * entry point in a browser.
+ *
+ * @example Auto-registration (recommended)
+ * ```ts
+ * import "shimmerkit"; // registers both elements on import
+ * ```
+ *
+ * @example Manual registration
+ * ```ts
+ * import { register } from "shimmerkit";
+ *
+ * register();
+ * // <shk-loader variant="ring"></shk-loader>
+ * // <shk-skeleton variant="card"></shk-skeleton>
+ * ```
  */
 export function register(): void {
   if (registered) return;

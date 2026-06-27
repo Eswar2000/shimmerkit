@@ -134,7 +134,17 @@ function cssLen(v: number | string): string {
   return /^-?\d+(\.\d+)?$/.test(t) ? `${t}px` : t;
 }
 
-/** Build the vnode tree for a loader. */
+/**
+ * Build the framework-neutral vnode tree for a loader. Pair with
+ * {@link nodeToHTML} to render to a string in any environment.
+ *
+ * @example
+ * ```ts
+ * import { buildLoaderNode, nodeToHTML } from "shimmerkit";
+ *
+ * const html = nodeToHTML(buildLoaderNode({ variant: "ring", size: 48 }));
+ * ```
+ */
 export function buildLoaderNode(opts: LoaderOptions = {}): VNode {
   const variant =
     opts.variant && LOADER_VARIANTS.includes(opts.variant)
@@ -165,7 +175,17 @@ export function buildLoaderNode(opts: LoaderOptions = {}): VNode {
   };
 }
 
-/** Build the vnode tree for a skeleton placeholder. */
+/**
+ * Build the framework-neutral vnode tree for a skeleton placeholder. Pair with
+ * {@link nodeToHTML} to render to a string in any environment.
+ *
+ * @example
+ * ```ts
+ * import { buildSkeletonNode, nodeToHTML } from "shimmerkit";
+ *
+ * const html = nodeToHTML(buildSkeletonNode({ variant: "card" }));
+ * ```
+ */
 export function buildSkeletonNode(opts: SkeletonOptions = {}): VNode {
   const variant: SkeletonVariant = opts.variant ?? "text";
 

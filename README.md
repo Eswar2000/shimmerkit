@@ -58,6 +58,38 @@ Styles auto-inject on the client. For zero-flash SSR, also import the stylesheet
 import "shimmerkit/styles.css";
 ```
 
+## Vanilla / Web Components
+
+No build step, no framework. Import the package once to register the
+`<shk-loader>` and `<shk-skeleton>` custom elements, then use them anywhere —
+including inside **Vue**, **Svelte**, and **Angular** templates (they're just
+custom elements).
+
+```html
+<script type="module">
+  import "shimmerkit"; // registers <shk-loader> and <shk-skeleton>
+</script>
+
+<!-- Loaders -->
+<shk-loader variant="ring" size="48" color="#6366f1"></shk-loader>
+<shk-loader variant="dots" size="56" color="tomato" speed="1.4"></shk-loader>
+
+<!-- Skeletons -->
+<shk-skeleton variant="text" lines="3"></shk-skeleton>
+<shk-skeleton variant="circle" width="48"></shk-skeleton>
+<shk-skeleton variant="card"></shk-skeleton>
+```
+
+Using a CDN? Pull the ESM build straight from a module CDN — still zero config:
+
+```html
+<script type="module">
+  import "https://esm.sh/shimmerkit";
+</script>
+
+<shk-loader variant="pulse"></shk-loader>
+```
+
 ### Avoid flashing on fast loads
 
 Pass `delay` (ms) and the loader/skeleton stays hidden until that time elapses — if your data arrives first, nothing ever flashes:
@@ -70,22 +102,6 @@ Pass `delay` (ms) and the loader/skeleton stays hidden until that time elapses �
 ```html
 <shk-loader variant="ring" delay="150"></shk-loader>
 ```
-
-## Anywhere else (Web Components)
-
-```html
-<script type="module">
-  import "shimmerkit"; // registers <shk-loader> and <shk-skeleton>
-</script>
-
-<shk-loader variant="dots" size="56" color="tomato" speed="1.4"></shk-loader>
-
-<shk-skeleton variant="text" lines="3"></shk-skeleton>
-<shk-skeleton variant="circle" width="48"></shk-skeleton>
-<shk-skeleton variant="card"></shk-skeleton>
-```
-
-Works the same in **Vue** and **Svelte** templates — they're just custom elements.
 
 ## API
 
