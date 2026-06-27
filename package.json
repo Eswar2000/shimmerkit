@@ -1,6 +1,6 @@
 {
   "name": "shimmerkit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Zero-dependency, framework-agnostic animated loaders & skeleton placeholders. One tuned engine, drops into React, Vue, Svelte, or plain HTML via Web Components. Accessible by default.",
   "type": "module",
   "sideEffects": [
