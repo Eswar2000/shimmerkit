@@ -2,6 +2,7 @@
 
 > Zero-dependency, framework-agnostic animated **loaders** & **skeleton** placeholders. One tuned engine — drops into React, Vue, Svelte, or plain HTML. Accessible by default.
 
+[![CI](https://github.com/Eswar2000/shimmerkit/actions/workflows/ci.yml/badge.svg)](https://github.com/Eswar2000/shimmerkit/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/shimmerkit.svg)](https://www.npmjs.com/package/shimmerkit)
 [![downloads](https://img.shields.io/npm/dw/shimmerkit.svg)](https://www.npmjs.com/package/shimmerkit)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/shimmerkit)](https://bundlephobia.com/package/shimmerkit)
@@ -80,15 +81,18 @@ custom elements).
 <shk-skeleton variant="card"></shk-skeleton>
 ```
 
-Using a CDN? Pull the ESM build straight from a module CDN — still zero config:
+Using a CDN? Pull the ESM build straight from a module CDN — no install, no bundler. The Web Components register on import and inject their own styles, so this snippet is fully self-contained:
 
 ```html
 <script type="module">
-  import "https://esm.sh/shimmerkit";
+  import "https://cdn.jsdelivr.net/npm/shimmerkit@0.1.0/+esm";
 </script>
 
-<shk-loader variant="pulse"></shk-loader>
+<shk-loader variant="ring" size="48" color="#6366f1"></shk-loader>
+<shk-skeleton variant="card"></shk-skeleton>
 ```
+
+Other CDNs work too — `https://unpkg.com/shimmerkit@0.1.0` or `https://esm.sh/shimmerkit@0.1.0`. Pin a version (`@0.1.0`) so examples don't drift on future releases.
 
 ### Avoid flashing on fast loads
 
