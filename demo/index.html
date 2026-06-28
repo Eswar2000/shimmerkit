@@ -45,6 +45,34 @@
       .controls { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: center; margin-bottom: .5rem; }
       .controls label { font-size: .85rem; color: #9aa3b2; display: flex; gap: .5rem; align-items: center; }
       .controls input[type="range"] { accent-color: var(--accent); }
+      .copy-dialog {
+        background: #151922; color: #e7e9ee;
+        border: 1px solid #2a3242; border-radius: 14px;
+        padding: 1.25rem; max-width: 440px; width: 90vw;
+      }
+      .copy-dialog::backdrop { background: rgba(8, 10, 15, .6); backdrop-filter: blur(2px); }
+      .cd-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+      .cd-title { font-size: 1rem; }
+      .cd-title strong { color: var(--accent); }
+      .cd-close { background: none; border: none; color: #9aa3b2; font-size: 1.2rem; line-height: 1; cursor: pointer; }
+      .cd-close:hover { color: #e7e9ee; }
+      .cd-sub { margin: .4rem 0 1rem; font-size: .82rem; color: #9aa3b2; }
+      .cd-frameworks { display: flex; flex-wrap: wrap; gap: .6rem; }
+      .cd-frameworks button {
+        flex: 1 1 auto; min-width: 84px;
+        background: #1c2230; color: #e7e9ee; border: 1px solid #2a3242;
+        border-radius: 9px; padding: .55rem .75rem; font: inherit; font-size: .9rem; cursor: pointer;
+        transition: background .15s ease, border-color .15s ease;
+      }
+      .cd-frameworks button:hover, .cd-frameworks button:focus-visible {
+        background: #262d3d; border-color: var(--accent); outline: none;
+      }
+      .cd-preview {
+        margin: 1rem 0 0; padding: .75rem .85rem;
+        background: #0e1117; border: 1px solid #232a37; border-radius: 9px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: .8rem; color: #cdd3df; overflow-x: auto; white-space: pre;
+      }
       .controls input[type="color"] {
         -webkit-appearance: none;
         -moz-appearance: none;
@@ -70,6 +98,9 @@
       .sk-card { background: #151922; border: 1px solid #232a37; border-radius: 14px; padding: 1.25rem; max-width: 320px; display: flex; flex-direction: column; }
       .sk-card .name { font-size: .8rem; color: #9aa3b2; margin-top: auto; padding-top: 1rem; text-align: center; display: block; }
       .accent { color: #818cf8; }
+      .card, .sk-card { cursor: pointer; }
+      .card .name.copied, .sk-card .name.copied { color: var(--accent); }
+      .hint { margin: 0 0 1.25rem; font-size: .82rem; color: #6b7280; }
       .footer {
         margin-top: 3.5rem;
         padding-top: 1.5rem;
@@ -97,6 +128,8 @@
       <label>speed <input id="speed" type="range" min="0.5" max="3" step="0.1" value="1" /></label>
     </div>
 
+    <p class="hint">Tip: click any tile, then pick your framework to copy the snippet.</p>
+
     <h2>Loaders</h2>
     <div class="grid" id="loaders"></div>
 
@@ -111,6 +144,21 @@
       <div class="sk-card"><shk-skeleton variant="card"></shk-skeleton><span class="name">card</span></div>
       <div class="sk-card" style="grid-column: 1 / -1;"><shk-skeleton variant="grid" count="4"></shk-skeleton><span class="name">grid</span></div>
     </div>
+
+    <dialog id="copyDialog" class="copy-dialog">
+      <div class="cd-head">
+        <span class="cd-title">Copy <strong id="cd-variant">spinner</strong></span>
+        <button class="cd-close" id="cd-close" type="button" aria-label="Close">&times;</button>
+      </div>
+      <p class="cd-sub">Choose your framework — hover to preview, click to copy</p>
+      <div class="cd-frameworks">
+        <button type="button" data-fw="html">HTML</button>
+        <button type="button" data-fw="react">React</button>
+        <button type="button" data-fw="vue">Vue</button>
+        <button type="button" data-fw="svelte">Svelte</button>
+      </div>
+      <pre class="cd-preview" id="cd-preview"></pre>
+    </dialog>
 
     <footer class="footer">
       <span>&copy; <span id="year">2026</span> Eswar V. Released under the MIT License.</span>
@@ -141,6 +189,90 @@
         grid.appendChild(card);
         loaders.push(loader);
       }
+
+      // Click any tile to copy a snippet for the selected framework.
+      const NUMERIC = new Set(["lines", "count", "columns"]);
+      const snippetFor = (el, fw) => {
+        const isLoader = el.tagName.toLowerCase() === "shk-loader";
+        const keep = isLoader
+          ? ["variant"]
+          : ["variant", "lines", "count", "columns"];
+        const pairs = keep
+          .filter((a) => el.hasAttribute(a))
+          .map((a) => [a, el.getAttribute(a)]);
+        if (fw === "react") {
+          const comp = isLoader ? "Loader" : "Skeleton";
+          const props = pairs
+            .map(([k, v]) => (NUMERIC.has(k) ? `${k}={${v}}` : `${k}="${v}"`))
+            .join(" ");
+          return `<${comp} ${props} />`;
+        }
+        const tag = el.tagName.toLowerCase();
+        const attrs = pairs.map(([k, v]) => `${k}="${v}"`).join(" ");
+        // Vue allows self-closing custom elements; HTML/Svelte need a close tag.
+        return fw === "vue" ? `<${tag} ${attrs} />` : `<${tag} ${attrs}></${tag}>`;
+      };
+      const dialog = document.getElementById("copyDialog");
+      const cdVariant = document.getElementById("cd-variant");
+      const cdPreview = document.getElementById("cd-preview");
+      let currentEl = null;
+      let currentName = null;
+
+      const flash = (name) => {
+        if (!name) return;
+        name.dataset.label = name.dataset.label || name.textContent;
+        name.textContent = "copied \u2713";
+        name.classList.add("copied");
+        clearTimeout(name._t);
+        name._t = setTimeout(() => {
+          name.textContent = name.dataset.label;
+          name.classList.remove("copied");
+        }, 1100);
+      };
+
+      const openDialog = (e) => {
+        const card = e.target.closest(".card, .sk-card");
+        if (!card) return;
+        const el = card.querySelector("shk-loader, shk-skeleton");
+        if (!el) return;
+        currentEl = el;
+        currentName = card.querySelector(".name");
+        cdVariant.textContent = el.getAttribute("variant") || "default";
+        cdPreview.textContent = snippetFor(el, "html");
+        dialog.showModal();
+      };
+
+      document.querySelectorAll(".grid").forEach((g) => {
+        g.addEventListener("click", openDialog);
+        g.querySelectorAll(".card, .sk-card").forEach(
+          (c) => (c.title = "Click to copy snippet"),
+        );
+      });
+
+      dialog.querySelectorAll(".cd-frameworks button").forEach((btn) => {
+        const fw = btn.dataset.fw;
+        const preview = () => {
+          if (currentEl) cdPreview.textContent = snippetFor(currentEl, fw);
+        };
+        btn.addEventListener("mouseenter", preview);
+        btn.addEventListener("focus", preview);
+        btn.addEventListener("click", () => {
+          if (currentEl) {
+            navigator.clipboard
+              .writeText(snippetFor(currentEl, fw))
+              .then(() => flash(currentName))
+              .catch(() => {});
+          }
+          dialog.close();
+        });
+      });
+
+      document
+        .getElementById("cd-close")
+        .addEventListener("click", () => dialog.close());
+      dialog.addEventListener("click", (e) => {
+        if (e.target === dialog) dialog.close();
+      });
 
       const color = document.getElementById("color");
       const size = document.getElementById("size");
