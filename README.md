@@ -9,11 +9,11 @@
 
 **[🔗 Live demo](https://eswar2000.github.io/shimmerkit/)** — play with every loader & skeleton, tweak color, size, and speed.
 
-21 curated, hand-tuned loaders + 10 skeleton presets. No SVG, no JS animation loop — just CSS that scales with `currentColor` and a couple of custom properties. The exact same visuals everywhere because every renderer reads from one shared engine.
+22 curated, hand-tuned loaders + 10 skeleton presets. No SVG, no JS animation loop — just CSS that scales with `currentColor` and a couple of custom properties. The exact same visuals everywhere because every renderer reads from one shared engine.
 
 ```
 spinner · dots · bars · pulse · ring · ripple · wave · grid · orbit · bounce
-conic · comet · blob · wobble · bouncer · liquid · muncher · wifi · helix · cube · folding
+conic · comet · blob · wobble · bouncer · liquid · muncher · wifi · helix · cube · folding · inchworm
 ```
 
 ## Why
@@ -109,7 +109,7 @@ Pass `delay` (ms) and the loader/skeleton stays hidden until that time elapses �
 
 | Prop / attribute | Type                                                                                      | Default        |
 | ---------------- | ----------------------------------------------------------------------------------------- | -------------- |
-| `variant`        | `spinner · dots · bars · pulse · ring · ripple · wave · grid · orbit · bounce · conic · comet · blob · wobble · bouncer · liquid · muncher · wifi · helix · cube · folding` | `spinner`      |
+| `variant`        | `spinner · dots · bars · pulse · ring · ripple · wave · grid · orbit · bounce · conic · comet · blob · wobble · bouncer · liquid · muncher · wifi · helix · cube · folding · inchworm` | `spinner`      |
 | `size`           | `number` (px) \| CSS length                                                                | `40`           |
 | `color`          | any CSS color                                                                             | `currentColor` |
 | `speed`          | `number` multiplier (2 = twice as fast)                                                    | `1`            |

@@ -45,6 +45,7 @@ describe("buildLoaderNode", () => {
       helix: 5,
       cube: 6,
       folding: 4,
+      inchworm: 1,
     };
     for (const v of LOADER_VARIANTS) {
       expect(buildLoaderNode({ variant: v }).children).toHaveLength(counts[v]);

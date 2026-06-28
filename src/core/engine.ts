@@ -28,7 +28,8 @@ export type LoaderVariant =
   | "wifi"
   | "helix"
   | "cube"
-  | "folding";
+  | "folding"
+  | "inchworm";
 
 export const LOADER_VARIANTS: readonly LoaderVariant[] = [
   "spinner",
@@ -52,6 +53,7 @@ export const LOADER_VARIANTS: readonly LoaderVariant[] = [
   "helix",
   "cube",
   "folding",
+  "inchworm",
 ];
 
 /** How many `.shk__part` children each variant needs. */
@@ -77,6 +79,7 @@ const LOADER_PARTS: Record<LoaderVariant, number> = {
   helix: 5,
   cube: 6,
   folding: 4,
+  inchworm: 1,
 };
 
 export type SkeletonVariant =
@@ -621,6 +624,16 @@ export const STYLES = /* css */ `
 .shk--folding .shk__part:nth-child(4)::before{ animation-delay: calc(0.6s / var(--_speed)); }
 .shk--folding .shk__part:nth-child(3)::before{ animation-delay: calc(0.9s / var(--_speed)); }
 
+/* inchworm (crawling stretch) */
+.shk--inchworm .shk__part{
+  position: absolute; top: 38%; height: 24%; left: 0; right: 60%;
+  background: currentColor; border-radius: 99px;
+  animation:
+    shk-inch-l calc(1.8s / var(--_speed)) ease-in-out infinite,
+    shk-inch-r calc(1.8s / var(--_speed)) ease-in-out infinite,
+    shk-inch-h calc(1.8s / var(--_speed)) ease-in-out infinite;
+}
+
 @keyframes shk-spin{ to{ transform: rotate(360deg); } }
 @keyframes shk-dots{ 0%,80%,100%{ transform: scale(.3); opacity: .4; } 40%{ transform: scale(1); opacity: 1; } }
 @keyframes shk-bars{ 0%,100%{ transform: scaleY(.3); } 50%{ transform: scaleY(1); } }
@@ -680,6 +693,20 @@ export const STYLES = /* css */ `
   0%,10%{ transform: perspective(calc(var(--shk-size, 40px) * 3.5)) rotateX(-180deg); opacity: 0; }
   25%,75%{ transform: perspective(calc(var(--shk-size, 40px) * 3.5)) rotateX(0deg); opacity: 1; }
   90%,100%{ transform: perspective(calc(var(--shk-size, 40px) * 3.5)) rotateY(180deg); opacity: 0; }
+}
+@keyframes shk-inch-l{
+  0%,25%{ left: 0%; }
+  50%{ left: 60%; }
+  75%,100%{ left: 0%; }
+}
+@keyframes shk-inch-r{
+  0%{ right: 60%; }
+  25%,75%{ right: 0%; }
+  100%{ right: 60%; }
+}
+@keyframes shk-inch-h{
+  0%,50%,100%{ transform: scaleY(1); }
+  25%,75%{ transform: scaleY(.82); }
 }
 
 /* skeletons */
