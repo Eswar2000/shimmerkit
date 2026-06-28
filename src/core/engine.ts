@@ -26,7 +26,9 @@ export type LoaderVariant =
   | "liquid"
   | "muncher"
   | "wifi"
-  | "helix";
+  | "helix"
+  | "cube"
+  | "folding";
 
 export const LOADER_VARIANTS: readonly LoaderVariant[] = [
   "spinner",
@@ -48,6 +50,8 @@ export const LOADER_VARIANTS: readonly LoaderVariant[] = [
   "muncher",
   "wifi",
   "helix",
+  "cube",
+  "folding",
 ];
 
 /** How many `.shk__part` children each variant needs. */
@@ -71,6 +75,8 @@ const LOADER_PARTS: Record<LoaderVariant, number> = {
   muncher: 3,
   wifi: 3,
   helix: 5,
+  cube: 6,
+  folding: 4,
 };
 
 export type SkeletonVariant =
@@ -580,6 +586,41 @@ export const STYLES = /* css */ `
 .shk--helix .shk__part:nth-child(5)::before{ animation-delay: calc(-0.72s / var(--_speed)); }
 .shk--helix .shk__part:nth-child(5)::after{ animation-delay: calc(-1.72s / var(--_speed)); }
 
+/* cube (tumbling 3D cube) */
+.shk--cube{
+  transform-style: preserve-3d;
+  animation: shk-cube calc(3s / var(--_speed)) linear infinite;
+}
+.shk--cube .shk__part{
+  position: absolute; inset: 20%;
+  background: color-mix(in srgb, currentColor 15%, transparent);
+  border: calc(var(--shk-size, 40px) * 0.04) solid currentColor;
+}
+.shk--cube .shk__part:nth-child(1){ transform: rotateY(0deg) translateZ(calc(var(--shk-size, 40px) * 0.3)); }
+.shk--cube .shk__part:nth-child(2){ transform: rotateY(180deg) translateZ(calc(var(--shk-size, 40px) * 0.3)); }
+.shk--cube .shk__part:nth-child(3){ transform: rotateY(90deg) translateZ(calc(var(--shk-size, 40px) * 0.3)); }
+.shk--cube .shk__part:nth-child(4){ transform: rotateY(-90deg) translateZ(calc(var(--shk-size, 40px) * 0.3)); }
+.shk--cube .shk__part:nth-child(5){ transform: rotateX(90deg) translateZ(calc(var(--shk-size, 40px) * 0.3)); }
+.shk--cube .shk__part:nth-child(6){ transform: rotateX(-90deg) translateZ(calc(var(--shk-size, 40px) * 0.3)); }
+
+/* folding (origami folding cube) */
+.shk--folding{ display: block; transform: rotateZ(45deg); }
+.shk--folding .shk__part{
+  position: relative; float: left; width: 50%; height: 50%;
+  transform: scale(1.05);
+}
+.shk--folding .shk__part::before{
+  content: ""; position: absolute; inset: 0; background: currentColor;
+  transform-origin: 100% 100%;
+  animation: shk-folding calc(2.4s / var(--_speed)) infinite linear both;
+}
+.shk--folding .shk__part:nth-child(2){ transform: scale(1.05) rotateZ(90deg); }
+.shk--folding .shk__part:nth-child(3){ transform: scale(1.05) rotateZ(270deg); }
+.shk--folding .shk__part:nth-child(4){ transform: scale(1.05) rotateZ(180deg); }
+.shk--folding .shk__part:nth-child(2)::before{ animation-delay: calc(0.3s / var(--_speed)); }
+.shk--folding .shk__part:nth-child(4)::before{ animation-delay: calc(0.6s / var(--_speed)); }
+.shk--folding .shk__part:nth-child(3)::before{ animation-delay: calc(0.9s / var(--_speed)); }
+
 @keyframes shk-spin{ to{ transform: rotate(360deg); } }
 @keyframes shk-dots{ 0%,80%,100%{ transform: scale(.3); opacity: .4; } 40%{ transform: scale(1); opacity: 1; } }
 @keyframes shk-bars{ 0%,100%{ transform: scaleY(.3); } 50%{ transform: scaleY(1); } }
@@ -631,6 +672,15 @@ export const STYLES = /* css */ `
   0%,100%{ top: 0%; transform: translate(-50%, 0%) scale(1); opacity: 1; z-index: 2; }
   50%{ top: 100%; transform: translate(-50%, -100%) scale(.45); opacity: .4; z-index: 1; }
 }
+@keyframes shk-cube{
+  from{ transform: perspective(calc(var(--shk-size, 40px) * 5)) rotateX(0deg) rotateY(0deg); }
+  to{ transform: perspective(calc(var(--shk-size, 40px) * 5)) rotateX(360deg) rotateY(360deg); }
+}
+@keyframes shk-folding{
+  0%,10%{ transform: perspective(calc(var(--shk-size, 40px) * 3.5)) rotateX(-180deg); opacity: 0; }
+  25%,75%{ transform: perspective(calc(var(--shk-size, 40px) * 3.5)) rotateX(0deg); opacity: 1; }
+  90%,100%{ transform: perspective(calc(var(--shk-size, 40px) * 3.5)) rotateY(180deg); opacity: 0; }
+}
 
 /* skeletons */
 .shk-sk-root{ display: flex; flex-direction: column; gap: .6em; width: 100%; }
@@ -663,6 +713,11 @@ export const STYLES = /* css */ `
   }
   .shk--helix .shk__part::before, .shk--helix .shk__part::after{
     animation: shk-rm-pulse 1.6s ease-in-out infinite !important;
+  }
+  .shk--cube{ animation: none !important; transform: none !important; }
+  .shk--folding .shk__part::before{
+    animation: shk-rm-pulse 1.6s ease-in-out infinite !important;
+    transform: none !important;
   }
   .shk-sk::after{ display: none; }
   .shk-sk{ animation: shk-rm-pulse 1.6s ease-in-out infinite; }

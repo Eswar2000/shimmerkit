@@ -43,6 +43,8 @@ describe("buildLoaderNode", () => {
       muncher: 3,
       wifi: 3,
       helix: 5,
+      cube: 6,
+      folding: 4,
     };
     for (const v of LOADER_VARIANTS) {
       expect(buildLoaderNode({ variant: v }).children).toHaveLength(counts[v]);
